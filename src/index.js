@@ -1,4 +1,4 @@
-import { response } from './server_response_mockup';
+import { response } from './data/vehiclesDataMockup';
 
 window.renderApp = renderApp;
 window.updateAppLocation = updateAppLocation;
