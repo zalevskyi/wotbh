@@ -4,7 +4,7 @@ export function VehiclesSelectTier(selected) {
   return (
     `<label for='select-tier'>Tier: </label>` +
     `<select id='select-tier' onchange='` +
-    `window.updateAppLocation({tier:this.value}); window.renderApp();` +
+    `window.updateVehiclesList({tier:this.value})` +
     `'>` +
     `<option value=''>---</value>` +
     tiers.map(tier => `<option ${selected == tier ? 'selected' : ''}>${tier}</option>`).join('') +

@@ -9,7 +9,7 @@ export function VehiclesSelectType(selected) {
   return (
     `<label for='select-type'>Type: </label>` +
     `<select id='select-type' onchange='` +
-    `window.updateAppLocation({type:this.value}); window.renderApp();` +
+    `window.updateVehiclesList({type:this.value})` +
     `'>` +
     `<option value=''>---</value>` +
     types
