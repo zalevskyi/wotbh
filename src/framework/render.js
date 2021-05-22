@@ -1,15 +1,19 @@
-import { VehiclesOverview } from '../components/VehiclesOverview';
-import { getCurrentAppLocation } from '../helpers/appLocation';
+/** @jsx createElement */
+/*** @jsxFrag createFragment */
+import { createElement } from './element';
 
-export function renderApp() {
-  let view, parameters;
-  ({ view, parameters } = getCurrentAppLocation());
-  if (view === '?list') {
-    document.getElementById('app-root').innerHTML = VehiclesOverview(parameters);
-  } else if (view === '?compare') {
-    document.getElementById('app-root').innerHTML = 'compareApp(parameters)';
-  } else {
-    window.history.pushState('', '', window.location.origin + '/?list');
-    renderApp();
-  }
+let Component, Target;
+
+/**
+ * Renders a component and attaches it to the target DOM element
+ * @param componentFunction - Component function or class
+ * @param target - DOM element to attach component to
+ */
+export function renderApp(componentFunction = null, target = null) {
+  // Memorize parameters to enable re-render when `renderApp` gets called without arguments
+  if (componentFunction) Component = componentFunction;
+  if (target) Target = target;
+  // Ensure that the component gets rebuilt
+  Target.innerHTML = '';
+  Target.appendChild(<Component />);
 }

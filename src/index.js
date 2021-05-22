@@ -1,3 +1,4 @@
+import { App } from './components/App';
 import { renderApp } from './framework/render';
 import { updateAppLocation } from './helpers/appLocation';
 import { updateVehiclesList } from './data/vehiclesData';
@@ -10,5 +11,5 @@ window.dataStore = {
   error: null,
 };
 
-renderApp();
+renderApp(App, document.getElementById('app-root'));
 updateAppLocation({});
