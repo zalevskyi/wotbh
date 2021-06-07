@@ -5,13 +5,14 @@ import { VehiclesOverview } from '../components/VehiclesOverview';
 import { getCurrentAppLocation } from '../helpers/appLocation';
 
 export function App() {
-  let view, parameters;
-  ({ view, parameters } = getCurrentAppLocation());
-  if (view === '?compare') {
+  let parameters = getCurrentAppLocation();
+  if (parameters['view'] === 'compare') {
     return <></>;
   }
-  if (view != '?list') {
-    window.history.pushState('', '', window.location.origin + '/?list');
+  if (parameters['view'] != 'list') {
+    const url = new URL(window.location.origin + window.location.pathname);
+    url.searchParams.set('view', 'list');
+    window.history.pushState({}, '', url);
   }
   return <VehiclesOverview {...parameters} />;
 }

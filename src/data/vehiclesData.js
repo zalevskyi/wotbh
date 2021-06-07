@@ -58,7 +58,7 @@ export function vehiclesList({ tier, type }) {
 
 export function updateVehiclesList(parameter) {
   updateAppLocation(parameter);
-  const { parameters } = getCurrentAppLocation();
+  const parameters = getCurrentAppLocation();
   if (parameters.tier && parameters.type) {
     window.dataStore.error = null;
     window.dataStore.isDataLoading = true;
