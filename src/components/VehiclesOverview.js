@@ -5,12 +5,20 @@ import { VehiclesSelectTier } from './VehiclesSelectTier';
 import { VehiclesSelectType } from './VehiclesSelectType';
 import { VehiclesTable } from './VehiclesTable';
 
-export function VehiclesOverview({ tier, type }) {
+export function VehiclesOverview({
+  currentTier,
+  setCurrentTier,
+  currentType,
+  setCurrentType,
+  error,
+  isLoading,
+  listData,
+}) {
   return (
     <>
-      <VehiclesSelectTier tier={tier} />
-      <VehiclesSelectType type={type} />
-      <VehiclesTable tier={tier} type={type} />
+      <VehiclesSelectTier currentTier={currentTier} setCurrentTier={setCurrentTier} />
+      <VehiclesSelectType currentType={currentType} setCurrentType={setCurrentType} />
+      <VehiclesTable listData={listData} error={error} isLoading={isLoading} />
     </>
   );
 }

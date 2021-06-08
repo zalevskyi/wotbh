@@ -1,18 +1,32 @@
 /** @jsx createElement */
 /** @jsxFrag createFragment */
-import { createElement, createFragment } from '../framework/element';
+import { useList } from '../customHooks';
+import { createElement } from '../framework';
 import { VehiclesOverview } from '../components/VehiclesOverview';
-import { getCurrentAppLocation } from '../helpers/appLocation';
+import { getCurrentQuery } from '../helpers/appLocation';
 
 export function App() {
-  let parameters = getCurrentAppLocation();
-  if (parameters['view'] === 'compare') {
-    return <></>;
+  const query = getCurrentQuery();
+  if (query.list) {
+    const {
+      currentTier,
+      setCurrentTier,
+      currentType,
+      setCurrentType,
+      error,
+      isLoading,
+      listData,
+    } = useList(query.list);
+    return (
+      <VehiclesOverview
+        currentTier={currentTier}
+        setCurrentTier={setCurrentTier}
+        currentType={currentType}
+        setCurrentType={setCurrentType}
+        error={error}
+        isLoading={isLoading}
+        listData={listData}
+      />
+    );
   }
-  if (parameters['view'] != 'list') {
-    const url = new URL(window.location.origin + window.location.pathname);
-    url.searchParams.set('view', 'list');
-    window.history.pushState({}, '', url);
-  }
-  return <VehiclesOverview {...parameters} />;
 }

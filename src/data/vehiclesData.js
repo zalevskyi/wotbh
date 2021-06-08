@@ -1,5 +1,3 @@
-import { updateAppLocation, getCurrentAppLocation } from '../helpers/appLocation';
-
 const API_URL = 'https://api.wotblitz.ru/wotb/encyclopedia/vehicles/';
 const FIELDS = [
   'type',
@@ -14,74 +12,48 @@ const LANG = 'en';
 
 let vehiclesData = null;
 
-export function vehiclesList({ tier, type }) {
-  let list = [];
+export const tiers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+export const types = [
+  { name: 'Light Tank', code: 'lightTank' },
+  { name: 'Medium Tank', code: 'mediumTank' },
+  { name: 'Heavy Tank', code: 'heavyTank' },
+  { name: 'AT', code: 'AT-SPG' },
+];
+
+export function getVehiclesList(tier, type) {
   if (vehiclesData) {
-    for (let vehicle of Object.values(vehiclesData)) {
-      if (vehicle.tier == tier && vehicle.type == type) {
-        list.push({
-          name: vehicle.name,
-          default_profile: {
-            hp: vehicle.default_profile.hp,
-            speed_forward: vehicle.default_profile.speed_forward,
-            gun: {
-              dispersion: vehicle.default_profile.gun.dispersion,
-            },
-            shells: {
-              damage: vehicle.default_profile.shells[0].damage,
-            },
+    return Promise.resolve(getCachedList(tier, type));
+  }
+  return fetchVehiclesData().then(data => {
+    return Promise.resolve(getCachedList(tier, type));
+  });
+}
+
+function getCachedList(tier, type) {
+  const list = [];
+  for (let vehicle of Object.values(vehiclesData)) {
+    if (vehicle.tier == tier && vehicle.type == type) {
+      list.push({
+        name: vehicle.name,
+        default_profile: {
+          hp: vehicle.default_profile.hp,
+          speed_forward: vehicle.default_profile.speed_forward,
+          gun: {
+            dispersion: vehicle.default_profile.gun.dispersion,
           },
-        });
-      }
-    }
-  } else {
-    // In case of visiting page via direct saved link with selected tier and type
-    // It is needed to fetch data here
-    if (tier && type) {
-      window.dataStore.error = null;
-      window.dataStore.isDataLoading = true;
-      fetchVehiclesData()
-        .then(({ error, data }) => {
-          window.dataStore.isDataLoading = false;
-          if (error) {
-            window.dataStore.error = error;
-          }
-        })
-        .catch(err => {
-          window.dataStore.error = 'Some error occurred.';
-        })
-        .finally(window.renderApp);
+          shells: {
+            damage: vehicle.default_profile.shells[0].damage,
+          },
+        },
+      });
     }
   }
   return list;
 }
 
-export function updateVehiclesList(parameter) {
-  updateAppLocation(parameter);
-  const parameters = getCurrentAppLocation();
-  if (parameters.tier && parameters.type) {
-    window.dataStore.error = null;
-    window.dataStore.isDataLoading = true;
-    window.renderApp();
-    fetchVehiclesData()
-      .then(({ error, data }) => {
-        window.dataStore.isDataLoading = false;
-        if (error) {
-          window.dataStore.error = error;
-        }
-      })
-      .catch(err => {
-        window.dataStore.error = 'Some error occurred.';
-      })
-      .finally(window.renderApp);
-  }
-}
-
 function fetchVehiclesData() {
-  if (vehiclesData) {
-    return Promise.resolve({});
-  }
-  let url =
+  const url =
     API_URL +
     '?' +
     [
@@ -98,6 +70,6 @@ function fetchVehiclesData() {
     })
     .then(responseJSON => {
       vehiclesData = responseJSON.data;
-      return {};
+      return vehiclesData;
     });
 }

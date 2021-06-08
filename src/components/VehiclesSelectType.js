@@ -1,25 +1,16 @@
 /** @jsx createElement */
 /** @jsxFrag createFragment */
-import { createElement, createFragment } from '../framework/element';
+import { createElement, createFragment } from '../framework';
+import { types } from '../data/vehiclesData';
 
-const types = [
-  { name: 'Light Tank', code: 'lightTank' },
-  { name: 'Medium Tank', code: 'mediumTank' },
-  { name: 'Heavy Tank', code: 'heavyTank' },
-  { name: 'AT', code: 'AT-SPG' },
-];
-
-export function VehiclesSelectType({ type: selectedType }) {
+export function VehiclesSelectType({ currentType, setCurrentType }) {
   return (
     <>
       <label for="select-type">Type: </label>
-      <select
-        id="select-type"
-        onchange={({ target }) => window.updateVehiclesList({ type: target.value })}
-      >
+      <select id="select-type" onchange={({ target }) => setCurrentType(target.value)}>
         <option value="">---</option>
         {types.map(type => (
-          <option value={type.code} selected={type.code === selectedType}>
+          <option value={type.code} selected={type.code === currentType}>
             {type.name}
           </option>
         ))}

@@ -1,20 +1,16 @@
 /** @jsx createElement */
 /** @jsxFrag createFragment */
-import { createElement, createFragment } from '../framework/element';
+import { createElement, createFragment } from '../framework';
+import { tiers } from '../data/vehiclesData';
 
-const tiers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-export function VehiclesSelectTier({ tier: selectedTier }) {
+export function VehiclesSelectTier({ currentTier, setCurrentTier }) {
   return (
     <>
       <label for="select-tier">Tier: </label>
-      <select
-        id="select-tier"
-        onchange={({ target }) => window.updateVehiclesList({ tier: target.value })}
-      >
+      <select id="select-tier" onchange={({ target }) => setCurrentTier(Number(target.value))}>
         <option value="">---</option>
         {tiers.map(tier => (
-          <option value={tier} selected={tier == selectedTier}>
+          <option value={tier} selected={tier == currentTier}>
             {tier}
           </option>
         ))}

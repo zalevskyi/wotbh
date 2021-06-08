@@ -1,15 +1,4 @@
 import { App } from './components/App';
-import { renderApp } from './framework/render';
-import { updateAppLocation } from './helpers/appLocation';
-import { updateVehiclesList } from './data/vehiclesData';
+import { render } from './framework';
 
-window.renderApp = renderApp;
-window.updateAppLocation = updateAppLocation;
-window.updateVehiclesList = updateVehiclesList;
-window.dataStore = {
-  isDataLoading: false,
-  error: null,
-};
-
-renderApp(App, document.getElementById('app-root'));
-updateAppLocation({});
+render(App, document.getElementById('app-root'));

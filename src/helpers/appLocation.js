@@ -1,26 +1,29 @@
-export function updateAppLocation(parameter) {
-  let parameters = getCurrentAppLocation();
-  for (let [key, value] of Object.entries(parameter)) {
-    parameters[key] = value;
-  }
-  if (parameters['view'] == 'list') {
-    const url = new URL(window.location.origin + window.location.pathname);
-    url.searchParams.set('view', 'list');
-    if (parameters['tier']) {
-      url.searchParams.set('tier', parameters['tier']);
+import { tiers, types } from '../data/vehiclesData';
+
+const views = ['list'];
+
+export function getCurrentQuery() {
+  const search = new URL(window.location).searchParams;
+  const view = views.includes(search.get('view')) ? search.get('view') : views[0];
+  const query = {};
+  query[view] = {};
+  if (view == 'list') {
+    const tier = Number(search.get('tier'));
+    const type = search.get('type');
+    if (tiers.includes(tier)) {
+      query['list']['tier'] = tier;
     }
-    if (parameters['type']) {
-      url.searchParams.set('type', parameters['type']);
+    if (types.some(element => element.code == type)) {
+      query['list']['type'] = type;
     }
-    window.history.pushState({}, '', url);
   }
+  return query;
 }
 
-export function getCurrentAppLocation() {
-  let search = new URL(window.location).searchParams;
-  let parameters = {};
-  for (let [key, value] of search.entries()) {
-    parameters[key] = value;
+export function updateLocationQuery(queryList) {
+  const url = new URL(window.location.origin + window.location.pathname);
+  for (let [key, value] of Object.entries(queryList)) {
+    url.searchParams.set(key, value);
   }
-  return parameters;
+  window.history.pushState({}, '', url);
 }
