@@ -1,6 +1,4 @@
-/** @jsx createElement */
-/** @jsxFrag createFragment */
-import { createElement } from '../framework';
+import React from 'react';
 import { VehiclesOverview } from '../components/VehiclesOverview';
 import { getCurrentQuery } from '../helpers/appLocation';
 

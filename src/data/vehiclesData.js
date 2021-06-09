@@ -1,5 +1,6 @@
 const API_URL = 'https://api.wotblitz.ru/wotb/encyclopedia/vehicles/';
 const FIELDS = [
+  'tank_id',
   'type',
   'tier',
   'name',
@@ -35,6 +36,7 @@ function getCachedList(tier, type) {
   for (let vehicle of Object.values(vehiclesData)) {
     if (vehicle.tier == tier && vehicle.type == type) {
       list.push({
+        tank_id: vehicle.tank_id,
         name: vehicle.name,
         default_profile: {
           hp: vehicle.default_profile.hp,

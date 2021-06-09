@@ -1,16 +1,18 @@
-/** @jsx createElement */
-/** @jsxFrag createFragment */
-import { createElement, createFragment } from '../framework';
+import React from 'react';
 import { types } from '../data/vehiclesData';
 
 export function VehiclesSelectType({ currentType, setCurrentType }) {
   return (
     <>
-      <label for="select-type">Type: </label>
-      <select id="select-type" onchange={({ target }) => setCurrentType(target.value)}>
+      <label htmlFor="select-type">Type: </label>
+      <select
+        id="select-type"
+        value={currentType}
+        onChange={({ target }) => setCurrentType(target.value)}
+      >
         <option value="">---</option>
         {types.map(type => (
-          <option value={type.code} selected={type.code === currentType}>
+          <option key={type.code} value={type.code}>
             {type.name}
           </option>
         ))}

@@ -1,6 +1,4 @@
-/** @jsx createElement */
-/** @jsxFrag createFragment */
-import { createElement } from '../framework';
+import React from 'react';
 
 export function VehiclesTable({ listData, error, isLoading }) {
   if (error != null) {
@@ -29,7 +27,7 @@ export function VehiclesTable({ listData, error, isLoading }) {
       </thead>
       <tbody>
         {listData.map(vehicle => (
-          <tr>
+          <tr key={vehicle.tank_id}>
             <td>{vehicle.name}</td>
             <td>{vehicle.default_profile.hp}</td>
             <td>{vehicle.default_profile.speed_forward}</td>

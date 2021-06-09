@@ -1,4 +1,4 @@
-import { useEffect, useState } from './framework';
+import { useEffect, useState } from 'react';
 import { updateLocationQuery } from './helpers/appLocation';
 import { getVehiclesList } from './data/vehiclesData';
 
@@ -7,9 +7,7 @@ export function useList({ tier = '', type = '' }) {
   const [currentType, setCurrentType] = useState(type);
   const [error, setError] = useState(null);
   const [listData, setListData] = useState(null);
-  // isLoading is variable, not constant intentially
-  // as it is the only way to set loading status in useEffect
-  let [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const queryList = { view: 'list' };
@@ -21,8 +19,7 @@ export function useList({ tier = '', type = '' }) {
     }
     updateLocationQuery(queryList);
     if (currentTier && currentType) {
-      // setIsLoading - breaks rendering
-      isLoading = true;
+      setIsLoading(true);
       getVehiclesList(currentTier, currentType)
         .then(data => {
           setError(null);

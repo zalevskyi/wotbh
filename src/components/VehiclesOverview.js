@@ -1,6 +1,4 @@
-/** @jsx createElement */
-/** @jsxFrag createFragment */
-import { createElement, createFragment } from '../framework/element';
+import React from 'react';
 import { useList } from '../customHooks';
 import { VehiclesSelectTier } from './VehiclesSelectTier';
 import { VehiclesSelectType } from './VehiclesSelectType';
