@@ -1,19 +1,21 @@
 /** @jsx createElement */
 /** @jsxFrag createFragment */
 import { createElement, createFragment } from '../framework/element';
+import { useList } from '../customHooks';
 import { VehiclesSelectTier } from './VehiclesSelectTier';
 import { VehiclesSelectType } from './VehiclesSelectType';
 import { VehiclesTable } from './VehiclesTable';
 
-export function VehiclesOverview({
-  currentTier,
-  setCurrentTier,
-  currentType,
-  setCurrentType,
-  error,
-  isLoading,
-  listData,
-}) {
+export function VehiclesOverview({ queryList }) {
+  const {
+    currentTier,
+    setCurrentTier,
+    currentType,
+    setCurrentType,
+    error,
+    isLoading,
+    listData,
+  } = useList(queryList);
   return (
     <>
       <VehiclesSelectTier currentTier={currentTier} setCurrentTier={setCurrentTier} />
