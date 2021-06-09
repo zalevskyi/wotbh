@@ -6,7 +6,7 @@ export function useList({ tier = '', type = '' }) {
   const [currentTier, setCurrentTier] = useState(tier);
   const [currentType, setCurrentType] = useState(type);
   const [error, setError] = useState(null);
-  const [listData, setListData] = useState([]);
+  const [listData, setListData] = useState(null);
   // isLoading is variable, not constant intentially
   // as it is the only way to set loading status in useEffect
   let [isLoading, setIsLoading] = useState(false);
@@ -35,7 +35,7 @@ export function useList({ tier = '', type = '' }) {
           setIsLoading(false);
         });
     } else {
-      setListData([]);
+      setListData(null);
     }
   }, [currentTier, currentType]);
 

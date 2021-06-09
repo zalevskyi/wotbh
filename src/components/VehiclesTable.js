@@ -9,8 +9,11 @@ export function VehiclesTable({ listData, error, isLoading }) {
   if (isLoading) {
     return <p>Please wait. Loading data ...</p>;
   }
-  if (listData.length == 0) {
+  if (!listData) {
     return <p>Please select Tier and Type</p>;
+  }
+  if (listData.length == 0) {
+    return <p>There are no vehicles for selected tier and type. Try another one</p>;
   }
 
   return (
