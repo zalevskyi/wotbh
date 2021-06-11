@@ -1,6 +1,6 @@
 import { tiers, types, rankings } from '../data/vehiclesData';
 
-const views = ['list'];
+const views = ['list', 'compare'];
 
 export function getCurrentQuery() {
   const search = new URL(window.location).searchParams;
@@ -19,6 +19,19 @@ export function getCurrentQuery() {
     }
     if (rankings.some(element => element.code == ranking)) {
       query['list']['ranking'] = ranking;
+    }
+  }
+  if (view == 'compare') {
+    let tank_id = search.get('tank_id');
+    if (tank_id) {
+      tank_id = tank_id.split(',').map(id => Number(id));
+      if (tank_id.length == 2 && tank_id[0] && tank_id[1]) {
+        query['compare']['tank_id'] = tank_id;
+      }
+    }
+    if (!query.compare.tank_id) {
+      query['list'] = {};
+      delete query['compare'];
     }
   }
   return query;

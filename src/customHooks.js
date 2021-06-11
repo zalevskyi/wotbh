@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { updateLocationQuery } from './helpers/appLocation';
-import { getVehiclesList } from './data/vehiclesData';
+import { getVehiclesList, getVehiclesCompare } from './data/vehiclesData';
 
 export function useList({ tier = '', type = '', ranking = '' }) {
   const [currentTier, setCurrentTier] = useState(tier);
@@ -58,4 +58,28 @@ export function useList({ tier = '', type = '', ranking = '' }) {
     isLoading,
     listData,
   };
+}
+
+export function useCompare({ tank_id = [] }) {
+  const [currentId, setCurrentId] = useState(tank_id);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [compareData, setCompareData] = useState(null);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getVehiclesCompare(tank_id)
+      .then(data => {
+        setError(null);
+        setCompareData(data);
+      })
+      .catch(err => {
+        setError(err.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [currentId]);
+
+  return { error, isLoading, compareData };
 }

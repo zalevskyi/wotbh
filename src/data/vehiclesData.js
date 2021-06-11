@@ -9,6 +9,7 @@ const FIELDS = [
   'default_profile.speed_forward',
   'default_profile.gun.dispersion',
   'default_profile.shells',
+  'images.preview',
 ];
 const LANG = 'en';
 const allUpperNations = ['usa', 'uk', 'ussr'];
@@ -44,6 +45,18 @@ export function getVehiclesList(tier, type, ranking) {
   }
   return fetchVehiclesData().then(data => {
     return Promise.resolve(getCachedList(tier, type, ranking));
+  });
+}
+
+export function getVehiclesCompare(tank_id) {
+  return fetchVehiclesCompareData(tank_id).then(data => {
+    const list = [];
+    for (let vehicle of Object.values(data)) {
+      vehicle.nation = nationToUpperCase(vehicle.nation);
+      vehicle.type = types.filter(type => type.code == vehicle.type)[0].name;
+      list.push(vehicle);
+    }
+    return Promise.resolve(list);
   });
 }
 
@@ -93,6 +106,24 @@ function fetchVehiclesData() {
     .then(responseJSON => {
       vehiclesData = responseJSON.data;
       return vehiclesData;
+    });
+}
+
+function fetchVehiclesCompareData(tank_id) {
+  const url = new URL(API_URL);
+  url.searchParams.set('application_id', process.env.WOTB_APP_ID);
+  url.searchParams.set('fields', FIELDS.join(','));
+  url.searchParams.set('tank_id', tank_id.join(','));
+  url.searchParams.set('language', LANG);
+  return fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        throw Error(response.statusText);
+      }
+      return response.json();
+    })
+    .then(responseJSON => {
+      return responseJSON.data;
     });
 }
 
