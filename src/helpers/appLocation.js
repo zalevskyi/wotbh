@@ -31,3 +31,14 @@ export function updateLocationQuery(queryList) {
   }
   window.history.pushState({}, '', url);
 }
+
+export function getCompareLink(compareSet) {
+  const url = new URL(window.location.origin + window.location.pathname);
+  const tank_ids = [];
+  for (let value of compareSet.values()) {
+    tank_ids.push(value);
+  }
+  url.searchParams.set('view', 'compare');
+  url.searchParams.set('tank_id', tank_ids.join(','));
+  return url;
+}

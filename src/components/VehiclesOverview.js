@@ -4,6 +4,7 @@ import { VehiclesSelectTier } from './VehiclesSelectTier';
 import { VehiclesSelectType } from './VehiclesSelectType';
 import { VehiclesSelectRanking } from './VehiclesSelectRanking';
 import { VehiclesTable } from './VehiclesTable';
+import { VehiclesCompareLink } from './VehiclesCompareLink';
 
 export function VehiclesOverview({ queryList }) {
   const {
@@ -13,6 +14,8 @@ export function VehiclesOverview({ queryList }) {
     setCurrentType,
     currentRanking,
     setCurrentRanking,
+    currentCompareSet,
+    setCurrentCompareSet,
     error,
     isLoading,
     listData,
@@ -26,7 +29,20 @@ export function VehiclesOverview({ queryList }) {
       ) : (
         <></>
       )}
-      <VehiclesTable listData={listData} error={error} isLoading={isLoading} />
+      {currentCompareSet.size == 2 ? (
+        <div>
+          <VehiclesCompareLink compareSet={currentCompareSet} listData={listData} />
+        </div>
+      ) : (
+        <></>
+      )}
+      <VehiclesTable
+        listData={listData}
+        compareSet={currentCompareSet}
+        setCompareSet={setCurrentCompareSet}
+        error={error}
+        isLoading={isLoading}
+      />
     </>
   );
 }

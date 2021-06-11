@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function VehiclesTable({ listData, error, isLoading }) {
+export function VehiclesTable({ listData, compareSet, setCompareSet, error, isLoading }) {
   if (error != null) {
     return <p>{error}</p>;
   }
@@ -24,6 +24,7 @@ export function VehiclesTable({ listData, error, isLoading }) {
           <th>Speed</th>
           <th>Damage</th>
           <th>Dispersion</th>
+          <th>Compare</th>
         </tr>
       </thead>
       <tbody>
@@ -35,6 +36,23 @@ export function VehiclesTable({ listData, error, isLoading }) {
             <td>{vehicle.default_profile.speed_forward}</td>
             <td>{vehicle.default_profile.shells.damage}</td>
             <td>{vehicle.default_profile.gun.dispersion}</td>
+            <td>
+              <input
+                type="checkbox"
+                value={vehicle.tank_id}
+                disabled={compareSet.size == 2 && !compareSet.has(vehicle.tank_id)}
+                checked={compareSet.has(vehicle.tank_id)}
+                onChange={({ target }) => {
+                  const newCompareSet = new Set(compareSet);
+                  if (target.checked) {
+                    newCompareSet.add(Number(target.value));
+                  } else {
+                    newCompareSet.delete(Number(target.value));
+                  }
+                  setCompareSet(newCompareSet);
+                }}
+              ></input>
+            </td>
           </tr>
         ))}
       </tbody>

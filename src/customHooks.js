@@ -6,6 +6,7 @@ export function useList({ tier = '', type = '', ranking = '' }) {
   const [currentTier, setCurrentTier] = useState(tier);
   const [currentType, setCurrentType] = useState(type);
   const [currentRanking, setCurrentRanking] = useState(ranking);
+  const [currentCompareSet, setCurrentCompareSet] = useState(new Set());
   const [error, setError] = useState(null);
   const [listData, setListData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +41,10 @@ export function useList({ tier = '', type = '', ranking = '' }) {
     }
   }, [currentTier, currentType, currentRanking]);
 
+  useEffect(() => {
+    setCurrentCompareSet(new Set());
+  }, [currentTier, currentType]);
+
   return {
     currentTier,
     setCurrentTier,
@@ -47,6 +52,8 @@ export function useList({ tier = '', type = '', ranking = '' }) {
     setCurrentType,
     currentRanking,
     setCurrentRanking,
+    currentCompareSet,
+    setCurrentCompareSet,
     error,
     isLoading,
     listData,
