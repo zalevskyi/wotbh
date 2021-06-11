@@ -2,6 +2,7 @@ import React from 'react';
 import { useList } from '../customHooks';
 import { VehiclesSelectTier } from './VehiclesSelectTier';
 import { VehiclesSelectType } from './VehiclesSelectType';
+import { VehiclesSelectRanking } from './VehiclesSelectRanking';
 import { VehiclesTable } from './VehiclesTable';
 
 export function VehiclesOverview({ queryList }) {
@@ -10,14 +11,21 @@ export function VehiclesOverview({ queryList }) {
     setCurrentTier,
     currentType,
     setCurrentType,
+    currentRanking,
+    setCurrentRanking,
     error,
     isLoading,
     listData,
   } = useList(queryList);
   return (
     <>
-      <VehiclesSelectTier currentTier={currentTier} setCurrentTier={setCurrentTier} />
-      <VehiclesSelectType currentType={currentType} setCurrentType={setCurrentType} />
+      <VehiclesSelectTier value={currentTier} onChange={setCurrentTier} />
+      <VehiclesSelectType value={currentType} onChange={setCurrentType} />
+      {listData && listData.length > 0 ? (
+        <VehiclesSelectRanking value={currentRanking} onChange={setCurrentRanking} />
+      ) : (
+        <></>
+      )}
       <VehiclesTable listData={listData} error={error} isLoading={isLoading} />
     </>
   );

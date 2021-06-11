@@ -24,16 +24,30 @@ export const types = [
   { name: 'AT', code: 'AT-SPG' },
 ];
 
-export function getVehiclesList(tier, type) {
+export const rankings = [
+  { name: 'Hit points', code: 'hp' },
+  { name: 'Speed', code: 'speed' },
+  { name: 'Damage', code: 'damage' },
+  { name: 'Dispersion', code: 'dispersion' },
+];
+
+const rankingSort = {
+  hp: (a, b) => b.default_profile.hp - a.default_profile.hp,
+  speed: (a, b) => b.default_profile.speed_forward - a.default_profile.speed_forward,
+  damage: (a, b) => b.default_profile.shells.damage - a.default_profile.shells.damage,
+  dispersion: (a, b) => a.default_profile.gun.dispersion - b.default_profile.gun.dispersion,
+};
+
+export function getVehiclesList(tier, type, ranking) {
   if (vehiclesData) {
-    return Promise.resolve(getCachedList(tier, type));
+    return Promise.resolve(getCachedList(tier, type, ranking));
   }
   return fetchVehiclesData().then(data => {
-    return Promise.resolve(getCachedList(tier, type));
+    return Promise.resolve(getCachedList(tier, type, ranking));
   });
 }
 
-function getCachedList(tier, type) {
+function getCachedList(tier, type, ranking) {
   const list = [];
   for (let vehicle of Object.values(vehiclesData)) {
     if (vehicle.tier == tier && vehicle.type == type) {
@@ -53,6 +67,9 @@ function getCachedList(tier, type) {
         },
       });
     }
+  }
+  if (rankings.some(element => element.code == ranking)) {
+    list.sort(rankingSort[ranking]);
   }
   return list;
 }

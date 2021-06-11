@@ -1,4 +1,4 @@
-import { tiers, types } from '../data/vehiclesData';
+import { tiers, types, rankings } from '../data/vehiclesData';
 
 const views = ['list'];
 
@@ -10,11 +10,15 @@ export function getCurrentQuery() {
   if (view == 'list') {
     const tier = Number(search.get('tier'));
     const type = search.get('type');
+    const ranking = search.get('ranking');
     if (tiers.includes(tier)) {
       query['list']['tier'] = tier;
     }
     if (types.some(element => element.code == type)) {
       query['list']['type'] = type;
+    }
+    if (rankings.some(element => element.code == ranking)) {
+      query['list']['ranking'] = ranking;
     }
   }
   return query;
