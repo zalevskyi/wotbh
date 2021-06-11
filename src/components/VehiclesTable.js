@@ -19,6 +19,7 @@ export function VehiclesTable({ listData, error, isLoading }) {
       <thead>
         <tr>
           <th>Name</th>
+          <th>Nation</th>
           <th>Hit points</th>
           <th>Speed</th>
           <th>Damage</th>
@@ -29,6 +30,7 @@ export function VehiclesTable({ listData, error, isLoading }) {
         {listData.map(vehicle => (
           <tr key={vehicle.tank_id}>
             <td>{vehicle.name}</td>
+            <td>{vehicle.nation}</td>
             <td>{vehicle.default_profile.hp}</td>
             <td>{vehicle.default_profile.speed_forward}</td>
             <td>{vehicle.default_profile.shells.damage}</td>

@@ -4,12 +4,14 @@ const FIELDS = [
   'type',
   'tier',
   'name',
+  'nation',
   'default_profile.hp',
   'default_profile.speed_forward',
   'default_profile.gun.dispersion',
   'default_profile.shells',
 ];
 const LANG = 'en';
+const allUpperNations = ['usa', 'uk', 'ussr'];
 
 let vehiclesData = null;
 
@@ -38,6 +40,7 @@ function getCachedList(tier, type) {
       list.push({
         tank_id: vehicle.tank_id,
         name: vehicle.name,
+        nation: nationToUpperCase(vehicle.nation),
         default_profile: {
           hp: vehicle.default_profile.hp,
           speed_forward: vehicle.default_profile.speed_forward,
@@ -74,4 +77,11 @@ function fetchVehiclesData() {
       vehiclesData = responseJSON.data;
       return vehiclesData;
     });
+}
+
+function nationToUpperCase(nation) {
+  if (allUpperNations.includes(nation)) {
+    return nation.toUpperCase();
+  }
+  return nation[0].toUpperCase() + nation.slice(1);
 }
