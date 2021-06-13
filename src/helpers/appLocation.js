@@ -43,6 +43,13 @@ export function updateLocationQuery(queryList) {
     url.searchParams.set(key, value);
   }
   window.history.pushState({}, '', url);
+  if (queryList.tier && queryList.type) {
+    document.title = `WoT Blitz Helper: Tier ${queryList.tier} - ${
+      types.filter(type => type.code == queryList.type)[0].name
+    }`;
+  } else {
+    document.title = 'WoT Blitz Helper';
+  }
 }
 
 export function getCompareLink(compareSet) {

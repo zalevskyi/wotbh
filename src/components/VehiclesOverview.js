@@ -22,17 +22,24 @@ export function VehiclesOverview({ queryList }) {
   } = useList(queryList);
   return (
     <>
+      <h1>WoT Blitz Vehicles</h1>
+      <h2>Category selection</h2>
       <VehiclesSelectTier value={currentTier} onChange={setCurrentTier} />
       <VehiclesSelectType value={currentType} onChange={setCurrentType} />
       {listData && listData.length > 0 ? (
-        <VehiclesSelectRanking value={currentRanking} onChange={setCurrentRanking} />
+        <>
+          <h2>Vehicles data:</h2>
+          <p>
+            <VehiclesSelectRanking value={currentRanking} onChange={setCurrentRanking} />
+          </p>
+        </>
       ) : (
         <></>
       )}
       {currentCompareSet.size == 2 ? (
-        <div>
+        <p>
           <VehiclesCompareLink compareSet={currentCompareSet} listData={listData} />
-        </div>
+        </p>
       ) : (
         <></>
       )}

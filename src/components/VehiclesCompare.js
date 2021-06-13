@@ -4,63 +4,82 @@ import { useCompare } from '../customHooks';
 export function VehiclesCompare({ queryCompare }) {
   const { error, isLoading, compareData } = useCompare(queryCompare);
   if (error != null) {
-    return <p>{error}</p>;
+    return (
+      <>
+        <h1>Face-to-face compare:</h1>
+        <p>{error}</p>
+      </>
+    );
   }
   if (isLoading) {
-    return <p>Please wait. Loading data ...</p>;
+    return (
+      <>
+        <h1>Face-to-face compare:</h1>
+        <p>Please wait. Loading data ...</p>
+      </>
+    );
   }
   if (!compareData || compareData.length != 2) {
-    return <p>Unknown data processing error</p>;
+    return (
+      <>
+        <h1>Face-to-face compare:</h1>
+        <p>Unknown data processing error</p>
+      </>
+    );
   }
+  document.title = `WoT Blitz Helper: ${compareData[0].name} (${compareData[0].nation}) vs. ${compareData[1].name} (${compareData[1].nation})`;
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Advantage</th>
-          <th>Value</th>
-          <th>Feature</th>
-          <th>Value</th>
-          <th>Advantage</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td></td>
-          <td>
-            <img src={compareData[0].images.preview} />
-          </td>
-          <td></td>
-          <td>
-            <img src={compareData[1].images.preview} />
-          </td>
-          <td></td>
-        </tr>
-        <CompareRow name={'Name'} left={compareData[0].name} right={compareData[1].name} />
-        <CompareRow name={'Nation'} left={compareData[0].nation} right={compareData[1].nation} />
-        <CompareRow name={'Tier'} left={compareData[0].tier} right={compareData[1].tier} />
-        <CompareRow name={'Type'} left={compareData[0].type} right={compareData[1].type} />
-        <CompareRowDiff
-          name={'Hit points'}
-          left={compareData[0].default_profile.hp}
-          right={compareData[1].default_profile.hp}
-        />
-        <CompareRowDiff
-          name={'Speed'}
-          left={compareData[0].default_profile.speed_forward}
-          right={compareData[1].default_profile.speed_forward}
-        />
-        <CompareRowDiff
-          name={'Damage'}
-          left={compareData[0].default_profile.shells[0].damage}
-          right={compareData[1].default_profile.shells[0].damage}
-        />
-        <CompareRowDiffReverse
-          name={'Dispersion'}
-          left={compareData[0].default_profile.gun.dispersion}
-          right={compareData[1].default_profile.gun.dispersion}
-        />
-      </tbody>
-    </table>
+    <>
+      <h1>Face-to-face compare:</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Advantage</th>
+            <th>Value</th>
+            <th>Feature</th>
+            <th>Value</th>
+            <th>Advantage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td></td>
+            <td>
+              <img src={compareData[0].images.preview} />
+            </td>
+            <td></td>
+            <td>
+              <img src={compareData[1].images.preview} />
+            </td>
+            <td></td>
+          </tr>
+          <CompareRow name={'Name'} left={compareData[0].name} right={compareData[1].name} />
+          <CompareRow name={'Nation'} left={compareData[0].nation} right={compareData[1].nation} />
+          <CompareRow name={'Tier'} left={compareData[0].tier} right={compareData[1].tier} />
+          <CompareRow name={'Type'} left={compareData[0].type} right={compareData[1].type} />
+          <CompareRowDiff
+            name={'Hit points'}
+            left={compareData[0].default_profile.hp}
+            right={compareData[1].default_profile.hp}
+          />
+          <CompareRowDiff
+            name={'Speed'}
+            left={compareData[0].default_profile.speed_forward}
+            right={compareData[1].default_profile.speed_forward}
+          />
+          <CompareRowDiff
+            name={'Damage'}
+            left={compareData[0].default_profile.shells[0].damage}
+            right={compareData[1].default_profile.shells[0].damage}
+          />
+          <CompareRowDiffReverse
+            name={'Dispersion'}
+            left={compareData[0].default_profile.gun.dispersion}
+            right={compareData[1].default_profile.gun.dispersion}
+          />
+        </tbody>
+      </table>
+    </>
   );
 }
 
