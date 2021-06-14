@@ -19,7 +19,8 @@ export function VehiclesCompare({ queryCompare }) {
       </>
     );
   }
-  if (!compareData || compareData.length != 2) {
+  if (!compareData || compareData.length != 2) { // todo
+      const [fist, ] = compareData
     return (
       <>
         <h1>Face-to-face compare:</h1>
@@ -27,7 +28,9 @@ export function VehiclesCompare({ queryCompare }) {
       </>
     );
   }
+
   document.title = `WoT Blitz Helper: ${compareData[0].name} (${compareData[0].nation}) vs. ${compareData[1].name} (${compareData[1].nation})`;
+
   return (
     <>
       <h1>Face-to-face compare:</h1>
@@ -43,7 +46,7 @@ export function VehiclesCompare({ queryCompare }) {
         </thead>
         <tbody>
           <tr>
-            <td></td>
+            <td></td> // todo
             <td>
               <img src={compareData[0].images.preview} />
             </td>
@@ -59,7 +62,7 @@ export function VehiclesCompare({ queryCompare }) {
           <CompareRow name={'Type'} left={compareData[0].type} right={compareData[1].type} />
           <CompareRowDiff
             name={'Hit points'}
-            left={compareData[0].default_profile.hp}
+            left={compareData[0].default_profile.hp} // defaultProfile
             right={compareData[1].default_profile.hp}
           />
           <CompareRowDiff
@@ -100,7 +103,7 @@ function CompareRowDiff({ name, left, right }) {
     <tr>
       <td>
         {left > right
-          ? `+${left - right} (${Math.round(((left - right) / right) * 1000) / 10}%)`
+          ? `+${left - right} (${Math.round(((left - right) / right) * 1000) / 10}%)` // move to function
           : ''}
       </td>
       <td>{left}</td>

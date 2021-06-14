@@ -53,7 +53,7 @@ export function getVehiclesCompare(tank_id) {
     const list = [];
     for (let vehicle of Object.values(data)) {
       vehicle.nation = nationToUpperCase(vehicle.nation);
-      vehicle.type = types.filter(type => type.code == vehicle.type)[0].name;
+      vehicle.type = types.filter(type => type.code == vehicle.type)[0].name; // move to separate function multiple usage
       list.push(vehicle);
     }
     return Promise.resolve(list);
@@ -90,7 +90,7 @@ function getCachedList(tier, type, ranking) {
 function fetchVehiclesData() {
   const url =
     API_URL +
-    '?' +
+    '?' + // todo
     [
       `application_id=${process.env.WOTB_APP_ID}`,
       `fields=${encodeURIComponent(FIELDS.join(','))}`,
@@ -123,7 +123,7 @@ function fetchVehiclesCompareData(tank_id) {
       return response.json();
     })
     .then(responseJSON => {
-      return responseJSON.data;
+      return responseJSON.data; // Extra step
     });
 }
 
@@ -131,5 +131,5 @@ function nationToUpperCase(nation) {
   if (allUpperNations.includes(nation)) {
     return nation.toUpperCase();
   }
-  return nation[0].toUpperCase() + nation.slice(1);
+  return nation[0].toUpperCase() + nation.slice(1); // TODO use destructing
 }

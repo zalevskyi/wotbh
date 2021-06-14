@@ -26,7 +26,7 @@ export function VehiclesOverview({ queryList }) {
       <h2>Category selection</h2>
       <VehiclesSelectTier value={currentTier} onChange={setCurrentTier} />
       <VehiclesSelectType value={currentType} onChange={setCurrentType} />
-      {listData && listData.length > 0 ? (
+      {listData && listData.length > 0 ? ( //todo
         <>
           <h2>Vehicles data:</h2>
           <p>
@@ -36,13 +36,11 @@ export function VehiclesOverview({ queryList }) {
       ) : (
         <></>
       )}
-      {currentCompareSet.size == 2 ? (
+      {currentCompareSet.size === 2 && ( //todo
         <p>
           <VehiclesCompareLink compareSet={currentCompareSet} listData={listData} />
         </p>
-      ) : (
-        <></>
-      )}
+      }
       <VehiclesTable
         listData={listData}
         compareSet={currentCompareSet}

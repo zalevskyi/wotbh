@@ -13,14 +13,14 @@ export function useList({ tier = '', type = '', ranking = '' }) {
 
   useEffect(() => {
     const queryList = { view: 'list' };
-    if (currentTier) {
-      queryList['tier'] = currentTier;
-    }
+
+    queryList['tier'] = currentTier || queryList['tier'];
+
     if (currentType) {
       queryList['type'] = currentType;
     }
     if (currentRanking) {
-      queryList['ranking'] = currentRanking;
+      queryList['ranking'] = currentRanking; // TODO move to separate function
     }
     updateLocationQuery(queryList);
     if (currentTier && currentType) {
@@ -61,7 +61,7 @@ export function useList({ tier = '', type = '', ranking = '' }) {
 }
 
 export function useCompare({ tank_id = [] }) {
-  const [currentId, setCurrentId] = useState(tank_id);
+  const [currentId, setCurrentId] = useState(tank_id); // TODO  setCurrentId isn't used
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [compareData, setCompareData] = useState(null);

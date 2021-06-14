@@ -10,7 +10,7 @@ export function VehiclesTable({ listData, compareSet, setCompareSet, error, isLo
   if (!listData) {
     return <p>Please select Tier and Type</p>;
   }
-  if (listData.length == 0) {
+  if (listData.length === 0) {
     return <p>There are no vehicles for selected tier and type. Try another one</p>;
   }
 
@@ -37,6 +37,10 @@ export function VehiclesTable({ listData, compareSet, setCompareSet, error, isLo
             <td>{vehicle.default_profile.shells.damage}</td>
             <td>{vehicle.default_profile.gun.dispersion}</td>
             <td>
+
+
+              // move onChange to handler
+
               <input
                 type="checkbox"
                 value={vehicle.tank_id}
