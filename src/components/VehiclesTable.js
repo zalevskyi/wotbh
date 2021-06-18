@@ -1,6 +1,14 @@
 import React from 'react';
+import { vehiclesToCompare } from '../data/vehiclesData';
 
-export function VehiclesTable({ listData, compareSet, setCompareSet, error, isLoading }) {
+export function VehiclesTable({
+  listData,
+  compareSet,
+  setCompareSet,
+  error,
+  isLoading,
+  toggleCompare,
+}) {
   if (error != null) {
     return <p>{error}</p>;
   }
@@ -32,29 +40,17 @@ export function VehiclesTable({ listData, compareSet, setCompareSet, error, isLo
           <tr key={vehicle.tank_id}>
             <td>{vehicle.name}</td>
             <td>{vehicle.nation}</td>
-            <td>{vehicle.default_profile.hp}</td>
-            <td>{vehicle.default_profile.speed_forward}</td>
-            <td>{vehicle.default_profile.shells.damage}</td>
-            <td>{vehicle.default_profile.gun.dispersion}</td>
+            <td>{vehicle.defaultProfile.hp}</td>
+            <td>{vehicle.defaultProfile.speedForward}</td>
+            <td>{vehicle.defaultProfile.shells[0].damage}</td>
+            <td>{vehicle.defaultProfile.gun.dispersion}</td>
             <td>
-
-
-              // move onChange to handler
-
               <input
                 type="checkbox"
                 value={vehicle.tank_id}
-                disabled={compareSet.size == 2 && !compareSet.has(vehicle.tank_id)}
+                disabled={compareSet.size === vehiclesToCompare && !compareSet.has(vehicle.tank_id)}
                 checked={compareSet.has(vehicle.tank_id)}
-                onChange={({ target }) => {
-                  const newCompareSet = new Set(compareSet);
-                  if (target.checked) {
-                    newCompareSet.add(Number(target.value));
-                  } else {
-                    newCompareSet.delete(Number(target.value));
-                  }
-                  setCompareSet(newCompareSet);
-                }}
+                onChange={toggleCompare}
               ></input>
             </td>
           </tr>

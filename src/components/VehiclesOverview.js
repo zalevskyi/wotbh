@@ -1,12 +1,11 @@
 import React from 'react';
 import { useList } from '../customHooks';
-import { VehiclesSelectTier } from './VehiclesSelectTier';
-import { VehiclesSelectType } from './VehiclesSelectType';
-import { VehiclesSelectRanking } from './VehiclesSelectRanking';
+import { VehiclesSelect } from './VehiclesSelect';
 import { VehiclesTable } from './VehiclesTable';
 import { VehiclesCompareLink } from './VehiclesCompareLink';
+import { tiers, types, rankings, vehiclesToCompare } from '../data/vehiclesData';
 
-export function VehiclesOverview({ queryList }) {
+export function VehiclesOverview({ query }) {
   const {
     currentTier,
     setCurrentTier,
@@ -15,36 +14,44 @@ export function VehiclesOverview({ queryList }) {
     currentRanking,
     setCurrentRanking,
     currentCompareSet,
-    setCurrentCompareSet,
+    toggleCompare,
     error,
     isLoading,
     listData,
-  } = useList(queryList);
+  } = useList(query);
   return (
     <>
       <h1>WoT Blitz Vehicles</h1>
       <h2>Category selection</h2>
-      <VehiclesSelectTier value={currentTier} onChange={setCurrentTier} />
-      <VehiclesSelectType value={currentType} onChange={setCurrentType} />
-      {listData && listData.length > 0 ? ( //todo
+      <VehiclesSelect name="Tier" options={tiers} value={currentTier} onChange={setCurrentTier} />
+      <VehiclesSelect
+        name="Type"
+        optionsWithCode={types}
+        value={currentType}
+        onChange={setCurrentType}
+      />
+      {listData && listData.length > 0 && (
         <>
           <h2>Vehicles data:</h2>
           <p>
-            <VehiclesSelectRanking value={currentRanking} onChange={setCurrentRanking} />
+            <VehiclesSelect
+              name="Ranking"
+              optionsWithCode={rankings}
+              value={currentRanking}
+              onChange={setCurrentRanking}
+            />
           </p>
         </>
-      ) : (
-        <></>
       )}
-      {currentCompareSet.size === 2 && ( //todo
+      {currentCompareSet.size === vehiclesToCompare && (
         <p>
           <VehiclesCompareLink compareSet={currentCompareSet} listData={listData} />
         </p>
-      }
+      )}
       <VehiclesTable
         listData={listData}
         compareSet={currentCompareSet}
-        setCompareSet={setCurrentCompareSet}
+        toggleCompare={toggleCompare}
         error={error}
         isLoading={isLoading}
       />

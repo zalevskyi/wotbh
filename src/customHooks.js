@@ -12,17 +12,6 @@ export function useList({ tier = '', type = '', ranking = '' }) {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const queryList = { view: 'list' };
-
-    queryList['tier'] = currentTier || queryList['tier'];
-
-    if (currentType) {
-      queryList['type'] = currentType;
-    }
-    if (currentRanking) {
-      queryList['ranking'] = currentRanking; // TODO move to separate function
-    }
-    updateLocationQuery(queryList);
     if (currentTier && currentType) {
       setIsLoading(true);
       getVehiclesList(currentTier, currentType, currentRanking)
@@ -42,8 +31,26 @@ export function useList({ tier = '', type = '', ranking = '' }) {
   }, [currentTier, currentType, currentRanking]);
 
   useEffect(() => {
+    const queryList = { view: 'list' };
+    queryList['tier'] = currentTier;
+    queryList['type'] = currentType;
+    queryList['ranking'] = currentRanking;
+    updateLocationQuery(queryList);
+  }, [currentTier, currentType, currentRanking]);
+
+  useEffect(() => {
     setCurrentCompareSet(new Set());
   }, [currentTier, currentType]);
+
+  const toggleCompare = ({ target }) => {
+    const newCompareSet = new Set(currentCompareSet);
+    if (target.checked) {
+      newCompareSet.add(Number(target.value));
+    } else {
+      newCompareSet.delete(Number(target.value));
+    }
+    setCurrentCompareSet(newCompareSet);
+  };
 
   return {
     currentTier,
@@ -54,6 +61,7 @@ export function useList({ tier = '', type = '', ranking = '' }) {
     setCurrentRanking,
     currentCompareSet,
     setCurrentCompareSet,
+    toggleCompare,
     error,
     isLoading,
     listData,
@@ -61,10 +69,10 @@ export function useList({ tier = '', type = '', ranking = '' }) {
 }
 
 export function useCompare({ tank_id = [] }) {
-  const [currentId, setCurrentId] = useState(tank_id); // TODO  setCurrentId isn't used
+  const [currentId] = useState(tank_id);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [compareData, setCompareData] = useState(null);
+  const [compareData, setCompareData] = useState([]);
 
   useEffect(() => {
     setIsLoading(true);

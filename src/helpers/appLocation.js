@@ -1,4 +1,4 @@
-import { tiers, types, rankings } from '../data/vehiclesData';
+import { tiers, types, rankings, getTypeName } from '../data/vehiclesData';
 
 const views = ['list', 'compare'];
 
@@ -7,26 +7,28 @@ export function getCurrentQuery() {
   const view = views.includes(search.get('view')) ? search.get('view') : views[0];
   const query = {};
   query[view] = {};
-  if (view == 'list') { // TODO
+  const { list, compare } = query;
+  if (list) {
     const tier = Number(search.get('tier'));
     const type = search.get('type');
     const ranking = search.get('ranking');
     if (tiers.includes(tier)) {
-      query['list']['tier'] = tier;
+      list['tier'] = tier;
     }
     if (types.some(element => element.code == type)) {
-      query['list']['type'] = type;
+      list['type'] = type;
     }
     if (rankings.some(element => element.code == ranking)) {
-      query['list']['ranking'] = ranking;
+      list['ranking'] = ranking;
     }
   }
-  if (view == 'compare') {
+  if (compare) {
     let tank_id = search.get('tank_id');
     if (tank_id) {
       tank_id = tank_id.split(',').map(id => Number(id));
-      if (tank_id.length == 2 && tank_id[0] && tank_id[1]) { // magic numbers & destructing
-        query['compare']['tank_id'] = tank_id;
+      const [first, second] = tank_id;
+      if (first && second) {
+        compare['tank_id'] = [first, second];
       }
     }
     if (!query.compare.tank_id) {
@@ -38,15 +40,16 @@ export function getCurrentQuery() {
 }
 
 export function updateLocationQuery(queryList) {
-  const url = new URL(window.location.origin + window.location.pathname); // TODO
+  const url = new URL(window.location.href);
+  url.search = '';
   for (let [key, value] of Object.entries(queryList)) {
-    url.searchParams.set(key, value);
+    if (value) {
+      url.searchParams.set(key, value);
+    }
   }
   window.history.pushState({}, '', url);
   if (queryList.tier && queryList.type) {
-    document.title = `WoT Blitz Helper: Tier ${queryList.tier} - ${
-      types.filter(type => type.code == queryList.type)[0].name // todo
-    }`;
+    document.title = `WoT Blitz Helper: Tier ${queryList.tier} - ${getTypeName(queryList.type)}`;
   } else {
     document.title = 'WoT Blitz Helper';
   }

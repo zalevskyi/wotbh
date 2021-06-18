@@ -32,11 +32,13 @@ export const rankings = [
   { name: 'Dispersion', code: 'dispersion' },
 ];
 
+export const vehiclesToCompare = 2;
+
 const rankingSort = {
-  hp: (a, b) => b.default_profile.hp - a.default_profile.hp,
-  speed: (a, b) => b.default_profile.speed_forward - a.default_profile.speed_forward,
-  damage: (a, b) => b.default_profile.shells.damage - a.default_profile.shells.damage,
-  dispersion: (a, b) => a.default_profile.gun.dispersion - b.default_profile.gun.dispersion,
+  hp: (a, b) => b.defaultProfile.hp - a.defaultProfile.hp,
+  speed: (a, b) => b.defaultProfile.speedForward - a.defaultProfile.speedForward,
+  damage: (a, b) => b.defaultProfile.shells[0].damage - a.defaultProfile.shells[0].damage,
+  dispersion: (a, b) => a.defaultProfile.gun.dispersion - b.defaultProfile.gun.dispersion,
 };
 
 export function getVehiclesList(tier, type, ranking) {
@@ -52,34 +54,33 @@ export function getVehiclesCompare(tank_id) {
   return fetchVehiclesCompareData(tank_id).then(data => {
     const list = [];
     for (let vehicle of Object.values(data)) {
-      vehicle.nation = nationToUpperCase(vehicle.nation);
-      vehicle.type = types.filter(type => type.code == vehicle.type)[0].name; // move to separate function multiple usage
       list.push(vehicle);
+    }
+    for (let vehicle of list) {
+      vehicle.nation = nationCapitalize(vehicle.nation);
+      vehicle.type = getTypeName(vehicle.type);
     }
     return Promise.resolve(list);
   });
+}
+
+export function getTypeName(typeCode) {
+  for (let type of types) {
+    if (type.code === typeCode) {
+      return type.name;
+    }
+  }
 }
 
 function getCachedList(tier, type, ranking) {
   const list = [];
   for (let vehicle of Object.values(vehiclesData)) {
     if (vehicle.tier == tier && vehicle.type == type) {
-      list.push({
-        tank_id: vehicle.tank_id,
-        name: vehicle.name,
-        nation: nationToUpperCase(vehicle.nation),
-        default_profile: {
-          hp: vehicle.default_profile.hp,
-          speed_forward: vehicle.default_profile.speed_forward,
-          gun: {
-            dispersion: vehicle.default_profile.gun.dispersion,
-          },
-          shells: {
-            damage: vehicle.default_profile.shells[0].damage,
-          },
-        },
-      });
+      list.push(vehicle);
     }
+  }
+  for (let vehicle of list) {
+    vehicle.nation = nationCapitalize(vehicle.nation);
   }
   if (rankings.some(element => element.code == ranking)) {
     list.sort(rankingSort[ranking]);
@@ -88,14 +89,10 @@ function getCachedList(tier, type, ranking) {
 }
 
 function fetchVehiclesData() {
-  const url =
-    API_URL +
-    '?' + // todo
-    [
-      `application_id=${process.env.WOTB_APP_ID}`,
-      `fields=${encodeURIComponent(FIELDS.join(','))}`,
-      `language=${LANG}`,
-    ].join('&');
+  const url = new URL(API_URL);
+  url.searchParams.set('application_id', process.env.WOTB_APP_ID);
+  url.searchParams.set('fields', FIELDS.join(','));
+  url.searchParams.set('language', LANG);
   return fetch(url)
     .then(response => {
       if (!response.ok) {
@@ -105,6 +102,7 @@ function fetchVehiclesData() {
     })
     .then(responseJSON => {
       vehiclesData = responseJSON.data;
+      renameCamelCaseInPlace(vehiclesData);
       return vehiclesData;
     });
 }
@@ -123,13 +121,27 @@ function fetchVehiclesCompareData(tank_id) {
       return response.json();
     })
     .then(responseJSON => {
-      return responseJSON.data; // Extra step
+      renameCamelCaseInPlace(responseJSON.data);
+      return responseJSON.data;
     });
 }
 
-function nationToUpperCase(nation) {
+function nationCapitalize(nation) {
   if (allUpperNations.includes(nation)) {
     return nation.toUpperCase();
   }
-  return nation[0].toUpperCase() + nation.slice(1); // TODO use destructing
+  return capitalize(nation);
+}
+
+function capitalize(str) {
+  return str[0].toUpperCase() + str.slice(1);
+}
+
+function renameCamelCaseInPlace(apiData) {
+  for (let vehicle of Object.values(apiData)) {
+    vehicle.defaultProfile = vehicle.default_profile;
+    vehicle.defaultProfile.speedForward = vehicle.defaultProfile.speed_forward;
+    delete vehicle.default_profile;
+    delete vehicle.defaultProfile.speed_forward;
+  }
 }
